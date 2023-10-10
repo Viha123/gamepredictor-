@@ -11,7 +11,7 @@ var app = express();
 
 const mongoose = require("mongoose");
 
-mongoose.set("stringQuery", false);
+mongoose.set("strictQuery", false);
 const mongoDB = "mongodb+srv://sviha195:JeA90LX2Edhloa5U@sandbox.bnjpbzw.mongodb.net/gamewars?retryWrites=true&w=majority"
 
 main().catch((err)=> console.log(err));

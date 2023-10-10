@@ -8,7 +8,7 @@ const PredictionSchema = new Schema({
 });
 
 PredictionSchema.virtual("url").get(function() {
-    return `/predictions/${this._id}`;
+    return `users/predictions/${this._id}`;
 });
 
 module.exports = mongoose.model("Prediction", PredictionSchema);
