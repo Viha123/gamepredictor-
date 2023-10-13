@@ -1,14 +1,12 @@
 //my script to get json objs of games
 //and populate the fixtures schema
-
 console.log("This script populates some test fixtures into database");
-
 const userArgs = process.argv.slice(2);
-
+var fetch = require('node-fetch');
 const Fixture = require("./models/Fixture");
-
 const fixtures = []; //aggregation of all Fixtures
-
+teams = ["afghanistan", "australia", "bangladesh", "england", "india", "netherlands", "new-zealand", "pakistan", "south-africa", "sri-lanka"]
+baseFetchUrl = "https://fixturedownload.com/feed/json/icc-cricket-world-cup-2023/" //base url to fetch all teams info from
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
@@ -41,11 +39,20 @@ async function fixtureCreate(index, team1, team2, d_match, winner) {
 
     console.log(`Added fixture: ${team1} vs ${team2}`);
 }
-
 async function createFixtures() {
-    console.log("Adding fixtures");
-    await Promise.all([
-        fixtureCreate(0, "testteam1", "testteam2", "2023-10-10", false),
-        fixtureCreate(1, "testteam3", "testteam4", "2023-10-8", "testteam3")
-    ]);
+
+    matchNumbers = new Set();
+
+    for(var i = 0; i < teams.length; i ++){
+        const response = await fetch(`${baseFetchUrl}${teams[i]}`);
+        const output = await response.json();
+        for (var j = 0; j < output.length; j ++){
+            if(!matchNumbers.has(output[j].MatchNumber)){
+                matchNumbers.add(output[j].MatchNumber);
+                // console.log(`${output[j].MatchNumber} : ${output[j].HomeTeam} vs ${output[j].AwayTeam}`);
+                await fixtureCreate(output[j].MatchNumber, output[j].HomeTeam, output[j].AwayTeam, output[j].DateUtc, false);
+            }
+        }
+    }
+    
 }
