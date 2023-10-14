@@ -11,7 +11,8 @@ const Fixture = require("../models/Fixture")
 const asyncHandler = require("express-async-handler");
 
 exports.fixture_list = asyncHandler(async(req,res,next)=>{
-    res.send("NOT IMPLEMENTED FIXTURE LIST");
+    const allFixtures = await Fixture.find({}, "team_1_name team_2_name").exec();
+    res.send(allFixtures);
 })
 exports.fixture_detail = asyncHandler(async(req,res, next) =>{
     res.send(`Not implemented: fixture detail: ${req.params.id}`);
