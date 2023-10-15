@@ -11,7 +11,7 @@ const Fixture = require("../models/Fixture")
 const asyncHandler = require("express-async-handler");
 
 exports.fixture_list = asyncHandler(async(req,res,next)=>{
-    const allFixtures = await Fixture.find({}, "team_1_name team_2_name").exec();
+    const allFixtures = await Fixture.find({}, "team_1_name team_2_name winner").exec();
     res.json(allFixtures);
 })
 exports.fixture_detail = asyncHandler(async(req,res, next) =>{
@@ -35,7 +35,7 @@ exports.fixture_delete_post = asyncHandler(async(req, res, next) =>{
 });
 
 exports.fixture_update_get = asyncHandler(async(req, res, next) =>{
-    res.send("NOT IMPLEMENTED: fixture update GET");
+    res.send(`NOT IMPLEMENTED: fixture update GET for ${req.params.id}`);
 });
 
 exports.fixture_update_post = asyncHandler(async(req, res, next) =>{

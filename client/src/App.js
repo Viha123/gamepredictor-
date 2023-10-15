@@ -5,6 +5,8 @@ import Navbar from './components/navbar';
 import Fixtures from "./components/fixtures";
 import Leaderboard from "./components/leaderboard";
 import User from "./components/user"
+import EditWinner from "./components/editWinner"
+
 function App() {
   return (
     <div className="app-container">
@@ -14,6 +16,7 @@ function App() {
         <Route exact path="/fixtures" element={<Fixtures />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/user" element={<User />} />
+        <Route path = "fixtures/:id/update/" element = {<EditWinner/>} />
       </Routes>
     </div>
   );
