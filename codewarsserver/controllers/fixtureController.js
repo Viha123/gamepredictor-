@@ -39,5 +39,14 @@ exports.fixture_update_get = asyncHandler(async(req, res, next) =>{
 });
 
 exports.fixture_update_post = asyncHandler(async(req, res, next) =>{
-    res.send("NOT IMPLEMENTED: fixture update POST");
+    console.log(`update post request received ${req.params.id}`);
+    //  .findByIdAndUpdate(req.params.id, {winner: })
+    console.log(req.body)
+    //now you need to verify and clean the response
+    const query = await Fixture.findById(req.params.id).exec();
+    if (req.body.winner.toLowerCase() === query.team_1_name.toLowerCase() || req.body.winner.toLowerCase() === query.team_2_name.toLowerCase() || req.body.winner.toLowerCase() === "Tie".toLowerCase()){
+        //only then is it valid
+        const q = await Fixture.findByIdAndUpdate(req.params.id, {winner : req.body.winner})
+    }
+    res.send("successfully done");
 });
