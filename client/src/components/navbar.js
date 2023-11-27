@@ -7,7 +7,7 @@ export default function Navbar() {
         <div className="navbar">
             <button><NavLink to = "/fixtures">Fixture Lists</NavLink></button>
             <button><NavLink to = "/leaderboard">Leaderboard</NavLink></button>
-            <button><NavLink to="/user">Your Predictions</NavLink></button>
+            <button><NavLink to="/user">Sign In</NavLink></button>
         </div>
     )
 }

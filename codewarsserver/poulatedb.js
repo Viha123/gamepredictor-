@@ -1,7 +1,7 @@
 //my script to get json objs of games
 //and populate the fixtures schema
 console.log("This script populates some test fixtures into database");
-const userArgs = process.argv.slice(2);
+const  Args = process.argv.slice(2);
 var fetch = require('node-fetch');
 const Fixture = require("./models/Fixture");
 const fixtures = []; //aggregation of all Fixtures

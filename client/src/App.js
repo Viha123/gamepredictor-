@@ -6,6 +6,7 @@ import Fixtures from "./components/fixtures";
 import Leaderboard from "./components/leaderboard";
 import User from "./components/user"
 import EditWinner from "./components/editWinner"
+import Predictions from './components/predictions';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/user" element={<User />} />
         <Route path = "fixtures/:id/update/" element = {<EditWinner/>} />
+        <Route path = "/predictions" element = {<Predictions />} />
       </Routes>
     </div>
   );

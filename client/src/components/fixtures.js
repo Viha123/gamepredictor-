@@ -2,21 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
 
 const Fixture = (props) => (
-    // <tr>
-    //   <td>{props.name_1_name}</td>
-    //   <td>{props.name_2_name}</td>
-    //   {/* <td>{props.fixture.}</td> */}
-    //   {/* <td>
-    //     <Link className="btn btn-link" to={`/edit/${props.record._id}`}>Edit</Link> |
-    //     <button className="btn btn-link"
-    //       onClick={() => {
-    //         props.deleteRecord(props.record._id);
-    //       }}
-    //     >
-    //       Delete
-    //     </button>
-    //   </td> */}
-    // </tr>
+
     <div>
       <h3> 
         {props.team_1_name} vs {props.team_2_name} -> Winner: {props.winner} 

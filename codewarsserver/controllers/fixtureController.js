@@ -24,6 +24,7 @@ exports.fixture_create_get = asyncHandler(async(req, res, next) =>{
 
 exports.fixture_create_post = asyncHandler(async(req, res, next) =>{
     res.send("NOT IMPLEMENTED: fixture create POST");
+
 });
 
 exports.fixture_delete_get = asyncHandler(async(req, res, next) =>{
