@@ -28,12 +28,15 @@ export default function User() {
         e.preventDefault();
         //alert(`Create account: ${createusername}`);
         //send create request
+        
+        navigate("/predictions");
+        console.log("reached here?");
         var payload = {
             username: createusername,
             email: "dummyemail@gmail.com",
             predictions: []
         };
-        await fetch(`http://localhost:3000/users/create`, {  // Enter your IP address here
+        const response = await fetch(`http://localhost:3000/users/create`, {  // Enter your IP address here
 
             method: 'POST',
             mode: "cors",
@@ -43,9 +46,10 @@ export default function User() {
               },
          
         });
-            
+        const docDetails = await response.json();
+        
+        //get id of user here?
 
-        navigate("/predictions");
 
     }
     return (
