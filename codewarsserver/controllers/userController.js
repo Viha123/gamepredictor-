@@ -48,6 +48,16 @@ exports.user_create_post = [
   }),
 ];
 
+exports.user_get_user_data = [
+  asyncHandler(async (req, res, next)=> {
+    console.log(req.params);
+    const data_with_name = await(User.find(req.params));
+
+    console.log(data_with_name);
+    res.json(data_with_name);
+  })
+];
+
 exports.user_delete_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: user delete GET");
 });

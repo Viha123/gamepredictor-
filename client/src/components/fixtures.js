@@ -5,7 +5,7 @@ const Fixture = (props) => (
 
     <div>
       <h3> 
-        {props.team_1_name} vs {props.team_2_name} -> Winner: {props.winner} 
+        {props.team_1_name} vs {props.team_2_name} === Winner: {props.winner} 
         <Link to = {`${props.id}/update`}>Edit Winner</Link>
         <button>View Details</button>  
       </h3>
