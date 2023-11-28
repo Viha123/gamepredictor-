@@ -18,7 +18,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/user" element={<User />} />
         <Route path = "fixtures/:id/update/" element = {<EditWinner/>} />
-        <Route path = "/predictions" element = {<Predictions />} />
+        <Route path = "user/:id/predictions" element = {<Predictions />} />
       </Routes>
     </div>
   );

@@ -29,7 +29,6 @@ export default function User() {
         //alert(`Create account: ${createusername}`);
         //send create request
         
-        navigate("/predictions");
         console.log("reached here?");
         var payload = {
             username: createusername,
@@ -47,7 +46,8 @@ export default function User() {
          
         });
         const docDetails = await response.json();
-        
+        console.log(docDetails);
+        navigate(`${docDetails._id}/predictions`);
         //get id of user here?
 
 

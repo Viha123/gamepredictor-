@@ -15,7 +15,10 @@ exports.user_list = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED user LIST");
 });
 exports.user_detail = asyncHandler(async (req, res, next) => {
-  res.send(`Not implemented: user detail: ${req.params.id}`);
+//   res.send(`Not implemented: user detail: ${req.params.id}`);
+  //find by id and then return prediction list
+  const allPredictions = await(User.findById(req.params.id)).exec();
+  res.json(allPredictions);
 });
 
 exports.user_create_get = asyncHandler(async (req, res, next) => {
