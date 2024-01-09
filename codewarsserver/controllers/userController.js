@@ -7,6 +7,8 @@
 /users/create // user/predictions/CRUD (later once basics works)
 */
 const User = require("../models/User");
+const Prediction = require("../models/Prediction")
+const Fixture = require("../models/Fixture")
 
 const asyncHandler = require("express-async-handler");
 // const { body, validationResult } = require("express-validator");
@@ -18,6 +20,16 @@ exports.user_detail = asyncHandler(async (req, res, next) => {
 //   res.send(`Not implemented: user detail: ${req.params.id}`);
   //find by id and then return prediction list
   const allPredictions = await(User.findById(req.params.id)).exec();
+  // console.log(allPredictions.predictions)
+  for(var i = 0; i < allPredictions.predictions.length; i ++){
+    // console.log("here?")
+    // console.log(allPredictions.predictions[i]._id)
+    // const p = await(Prediction.findById(allPredictions.predictions[i]))
+    // console.log("done")
+    
+    console.log(p)
+  }
+  console.log("HEREEREEE")
   res.json(allPredictions);
 });
 
@@ -71,5 +83,37 @@ exports.user_update_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.user_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: user update POST");
+  // res.send("data here at correct route");
+  console.log(`update post received ${req.params.id}`);
+  //here server will get the post request and handle sending the predictions
+  //will receive userid, and an array of structs for predictions
+  //compile predictions of user
+  const listOfUserPredictions = req.body;
+
+  // console.log(listOfUserPredictions);
+  console.log(listOfUserPredictions.length);
+  // res.send(listOfUserPredictions)
+ //user id will be params.id 
+ //prediction information will be req.body 
+  array = new Array()
+  for(var i = 0; i < listOfUserPredictions.length; i ++){
+    //first find fixture that matches with the id;
+    console.log(req.body[i].id)
+    const fix = await Fixture.findById(req.body[i].id).exec();
+    // console.log(fix)
+    // const pred = new Prediction({
+    //   fixutre: fix,
+    //   prediction: req.body[i].user_pred,
+    // })
+    const predFixture = fix;
+    const prediction = req.body[i].user_pred;
+    const arr = [predFixture, prediction]
+    // console.log(pred)
+    array.push(pred); //appends all predictions to user 
+  }
+//   //find user and update the information for user
+  console.log(array)
+  
+  const q = await User.findByIdAndUpdate(req.params.id, {predictions : array}) //updating the predictions 
+  res.send("done!");
 });
