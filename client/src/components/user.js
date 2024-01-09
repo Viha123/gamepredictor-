@@ -9,11 +9,15 @@ export default function User() {
   const [username, setUserName] = useState(""); //for now the username method is simple
 
   const [createusername, setCreateusername] = useState("");
+  const [createEmail, setEmail] = useState(""); //don't need email while signing in
   function updateUserName(val) {
     return setUserName(val);
   }
   function toggleCreateUserName(val) {
     return setCreateusername(val);
+  }
+  function toggleCreateEmail(val) {
+    return setEmail(val);
   }
   async function onSubmitSignIn(e) {
     e.preventDefault();
@@ -22,8 +26,16 @@ export default function User() {
 
     //response has the data of the username
     const data = await response.json();
-    const id = data[0]._id;
-    navigate(`${id}/predictions`);
+    console.log(data)
+    if (data.length == 0){
+      alert(`This username does not exist, Sign Up first`)
+
+    }
+    else{
+      const id = data[0]._id;
+      navigate(`${id}/predictions`);
+    }
+    
 
 
   }
@@ -35,7 +47,7 @@ export default function User() {
     console.log("reached here?");
     var payload = {
       username: createusername,
-      email: "dummyemail@gmail.com",
+      email: createEmail,
       predictions: [],
     };
     const response = await fetch(`http://localhost:3000/users/create`, {
@@ -81,6 +93,16 @@ export default function User() {
             id="userCreate"
             value={createusername}
             onChange={(e) => toggleCreateUserName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>User Email: </label>
+          <input
+            type="text"
+            className="form-control"
+            id="emailCreate"
+            value={createEmail}
+            onChange={(e) => toggleCreateEmail(e.target.value)}
           />
         </div>
         <div className="form-group">

@@ -10,7 +10,8 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     username: {type: String, require: true}, 
     email: {type: String, require: false},
-    predictions: [{type: Schema.Types.ObjectId, ref: "Prediction"}],
+    password: {type:String, require: true},
+    realPredictions: [],
 })
 UserSchema.virtual("url").get(function() {
     return `/users/${this._id}`;

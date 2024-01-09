@@ -11,7 +11,7 @@ export default function Prediction(props) {
         name={props.id}
         value={props.team_1_name}
         id={props.team_1_name}
-        defaultChecked={false}
+        defaultChecked={props.selected === props.team_1_name}
         onChange={()=>{props.handlePredictionChange({pred: props.team_1_name, id: props.id})}}
       />
       <label>{props.team_1_name}</label>
@@ -24,6 +24,7 @@ export default function Prediction(props) {
         name={props.id}
         value={props.team_2_name}
         id={props.team_2_name}
+        defaultChecked={props.selected === props.team_2_name}
         onChange = {()=>{props.handlePredictionChange({pred: props.team_2_name, id: props.id})}}
       />
       <label>{props.team_2_name}</label>

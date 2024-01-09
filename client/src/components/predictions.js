@@ -11,7 +11,8 @@ export default function Predictions() {
   const [fixtures, setFixtures] = useState([]);
   const [predictions, setPredictions] = useState([]);
   const [userData, setUserData] = useState([]);
-  
+  const [predictionsExist, setPredictionsExist] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   function handlePredictionChange(childData) {
       // console.log(fixtures[childData.id]);
       //here update prediction change 
@@ -20,38 +21,36 @@ export default function Predictions() {
           return obj.id === childData.id ? {...obj, user_pred: childData.pred} : obj 
         })
       })
-      
   }
   function init_prediction() {
     //this function will take the number of fixutres and each fixture id with a json object
     //json {fixtureid, userPrediction} and put it into state of prediction
     const array = new Array();
-    // if (userData.predictions.length == 0) {
-    console.log(predictions)
-    if (userData.predictions){
-      console.log(userData.predictions)  
+
+    if (userData.realPredictions.length != 0){
       for (var i = 0; i < fixtures.length; i++) {
-          
           let element = {
             id: fixtures[i]._id,
-            user_pred: "",
+            user_pred: userData.realPredictions[i][1],
           };
           array.push(element);
         }
       
     }
-    else{
+    else{ //if user does not have any predictions yet
+      for (var i = 0; i < fixtures.length; i++) {
+        let element = {
+          id: fixtures[i]._id,
+          user_pred: "",
+        };
+        array.push(element);
+      }
       
     }
     
-    // else{
-    //   //get actual predictions
-    // }
-    
+
     setPredictions(array);
-    // console.log("predictions: ")
     console.log(predictions)
-    // console.log(array)
     return array;
   }
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function Predictions() {
     }
     async function getUserData() {
       const response = await fetch(`http://localhost:3000/users/${params.id}`);
-
+      // console.log(response)
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         window.alert(message);
@@ -80,32 +79,64 @@ export default function Predictions() {
 
       const data = await response.json();
       setUserData(data);
+      console.log(data);
+      if (data.realPrecitions != []){
+        setPredictionsExist(true);
+      }
     }
-    getUserData();
+    getUserData(); //both are asynch so it doesnt matter which one is first and we cannot ensure init prediciton will run after getuserdata
     getFixtures();
-    init_prediction();
+    // init_prediction();
     return;
-  }, [fixtures.length, userData.length]);
-
+  }, []);
+  useEffect (()=> { //another useEffect which makes sure that init_prediction runs after getuserdata
+    if(userData.length != 0 && fixtures.length != 0){
+      init_prediction();
+    }
+  },[userData, fixtures])
   function create_list() {
     // cons
+    if (predictionsExist == false){
+      //just render without any predictions
+      return fixtures.map((fixture, index) => {
+        return (
+          <Prediction
+            team_1_name={fixture.team_1_name}
+            team_2_name={fixture.team_2_name}
+            winner={fixture.winner}
+            key={fixture._id}
+            id={fixture._id}
+            handlePredictionChange = {handlePredictionChange}
+            selected = {""}
+          />
+        );
+      });
+    }
+    //else make sure predictions are not empty
+    console.log(predictions)
+    if (predictionsExist == true && predictions.length !== 0) {
+      console.log("Inside the map function")
+      return fixtures.map((fixture, index) => {
+        // console.log(predictions[index].user_pred)
 
-    return fixtures.map((fixture) => {
-      return (
-        <Prediction
-          team_1_name={fixture.team_1_name}
-          team_2_name={fixture.team_2_name}
-          winner={fixture.winner}
-          key={fixture._id}
-          id={fixture._id}
-          handlePredictionChange = {handlePredictionChange}
-        />
-      );
-    });
+        return (
+          <Prediction
+            team_1_name={fixture.team_1_name}
+            team_2_name={fixture.team_2_name}
+            winner={fixture.winner}
+            key={fixture._id}
+            id={fixture._id}
+            handlePredictionChange = {handlePredictionChange}
+            selected = {predictions[index].user_pred}
+          />
+        );
+      });
+    }
   }
 
   async function onSubmitPredictions() {
     console.log(predictions);   
+    setLoading(true);
     const response = await fetch(`http://localhost:3000/users/${userData._id}/update`, {
       // Enter your IP address here
       method: "POST",
@@ -117,6 +148,13 @@ export default function Predictions() {
     });
     console.log("done sending data");
     // console.log(response)
+    if (!response.ok) {
+      const message = `An error occurred: ${response.statusText}`;
+      window.alert(message);
+      return;
+    }
+    setLoading(false);
+    navigate("/leaderboard")
   }
 
   
@@ -124,8 +162,9 @@ export default function Predictions() {
   return (
     <div>
       <h1>PERSONALIZED PREDICTION PAGE FOR {userData.username}</h1>
-      <div>{create_list()}</div>
+      {predictions.length !== 0 ? (<div>{create_list()}</div>) : (<div>loading</div>)}
       <button onClick={onSubmitPredictions}> Submit Predictions </button>
+      {isLoading == true ? (<div>loading</div>) : (<br></br>)}
     </div>
   );
 }
