@@ -10,6 +10,7 @@ export default function User() {
 
   const [createusername, setCreateusername] = useState("");
   const [createEmail, setEmail] = useState(""); //don't need email while signing in
+  const [pass, setPass] = useState("");
   function updateUserName(val) {
     return setUserName(val);
   }
