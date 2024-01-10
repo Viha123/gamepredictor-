@@ -19,22 +19,36 @@ exports.user_list = asyncHandler(async (req, res, next) => {
 exports.user_detail = asyncHandler(async (req, res, next) => {
 //   res.send(`Not implemented: user detail: ${req.params.id}`);
   //find by id and then return prediction list
-  // console.log("inside user detail")
+  console.log("inside user detail")
   const allPredictions = await(User.findById(req.params.id)).exec();
-  // console.log(allPredictions.realPredictions)
-  // // console.log(allPredictions.predictions)
-  // for(var i = 0; i < allPredictions.realPredictions.length; i ++){
-  //   // console.log("here?")
-  //   // console.log(allPredictions.predictions[i]._id)
-  //   // const p = await(Prediction.findById(allPredictions.predictions[i]))
-  //   // console.log("done")
-    
-  //   console.log(p)
-  // }
-  // console.log("HEREEREEE")
+
   res.json(allPredictions);
 });
+exports.leaderboard_list_get = asyncHandler(async (req, res, next) => {
+  //first i need to get all fixtures
+  //then for each user I compare their predictions with the real results and then each user gets a score
+  //then sort the users by score, also send the score through a json object back to the client
 
+  const allFixtures = await Fixture.find({}, "team_1_name team_2_name winner").exec();
+  const allUsers = await User.find({}, "username realPredictions").exec();
+
+  var toSend = [];
+
+  for(var i = 0; i < allUsers.length; i ++){
+    var score = 0;
+    for(var j = 0; j < allUsers[i].realPredictions.length; j ++){
+
+        if(allUsers[i].realPredictions[j][1] == allFixtures[j].winner){
+            score += 1;
+        }
+    }
+    toSend.push({username: allUsers[i].username, score: score});
+  }
+  // Array.sort(toSend, (a,b)=> a.score.CompareTo(b.score))
+  toSend.sort((a,b)=> b.score - a.score)
+  console.log(toSend)
+  res.json(toSend)
+});
 exports.user_create_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: user create GET");
 });
@@ -85,32 +99,21 @@ exports.user_update_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.user_update_post = asyncHandler(async (req, res, next) => {
-  // res.send("data here at correct route");
-  // console.log(`update post received ${req.params.id}`);
+
   //here server will get the post request and handle sending the predictions
   //will receive userid, and an array of structs for predictions
   //compile predictions of user
   const listOfUserPredictions = req.body;
-
-  // console.log(listOfUserPredictions);
-  // console.log(listOfUserPredictions.length);
-  // res.send(listOfUserPredictions)
  //user id will be params.id 
  //prediction information will be req.body 
   array = new Array()
   for(var i = 0; i < listOfUserPredictions.length; i ++){
     //first find fixture that matches with the id;
-    // console.log(req.body[i].id)
+
     const fix = await Fixture.findById(req.body[i].id).exec();
-    // console.log(fix)
-    // const pred = new Prediction({
-    //   fixutre: fix,
-    //   prediction: req.body[i].user_pred,
-    // })
     const predFixture = fix;
     const prediction = req.body[i].user_pred;
     const arr = [predFixture, prediction]
-    // console.log(pred)
     array.push(arr); //appends all predictions to user 
   }
 //   //find user and update the information for user

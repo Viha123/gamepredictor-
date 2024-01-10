@@ -11,6 +11,8 @@ router.post("/create", user_controller.user_create_post);
 router.get("/", user_controller.user_list);
 router.get("/:id", user_controller.user_detail);
 
+router.get("/group/leaderboard", user_controller.leaderboard_list_get);
+
 router.get("/:id/update", user_controller.user_update_get);
 router.post("/:id/update", user_controller.user_update_post);
 
