@@ -11,6 +11,7 @@ export default function User() {
   const [createusername, setCreateusername] = useState("");
   const [createEmail, setEmail] = useState(""); //don't need email while signing in
   const [pass, setPass] = useState("");
+  const [signInPass, setSignInPass] = useState("");
   const [signUpdone, setSignUpdone] = useState(false);
   function updateUserName(val) {
     return setUserName(val);
@@ -24,6 +25,23 @@ export default function User() {
   async function onSubmitSignIn(e) {
     e.preventDefault();
     alert(`Sign in to account: ${username}`);
+    //before this we need to authenticate the user. 
+    //send username and password to server and check if it is correct
+    const postres = await fetch(`http://localhost:3000/users/user/auth`, {
+      // Enter your IP address here
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify({username: username, password: signInPass}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log(postres);
+    if (postres.status == 400){
+      alert("Incorrect Password");
+      return;
+    }
     const response = await fetch(`http://localhost:3000/users/data/${username}`);
 
     //response has the data of the username
@@ -86,9 +104,9 @@ export default function User() {
           <input
             type="password"
             className="form-control"
-            id="passCreate"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
+            id="signInPass"
+            value={signInPass}
+            onChange={(e) => setSignInPass(e.target.value)}
           />
         </div>
         <div className="form-group">

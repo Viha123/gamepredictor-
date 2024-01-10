@@ -31,5 +31,19 @@ UserSchema.statics.signUp = async function(username, email, password){
 
     return user;
 }
+UserSchema.statics.authenticate = async function(username, password){
+    const user = await this.findOne({ username: username });
+  
+    if (!user) throw new Error("User does not exist");
 
+    const match = await new Promise((resolve, reject) => {
+        bcrypt.compare(password, user.password, (err, result) => {
+        if (err) reject(err);
+        resolve(result);
+        });
+    });
+
+    return match ? user : null;
+    
+}
 module.exports = mongoose.model("User", UserSchema);

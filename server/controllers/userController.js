@@ -16,6 +16,26 @@ const asyncHandler = require("express-async-handler");
 exports.user_list = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED user LIST");
 });
+exports.user_authenticate = asyncHandler(async (req, res, next) => {
+  const {username, password} = req.body;
+  try {
+    const user = await User.authenticate(username, password);
+    if (user){
+      console.log("user authenticated");
+      res.json(user);
+    }
+    else {
+      console.log("here in case of wrong pass")
+      res.status(400).json({error: "Invalid Credentials"});
+    }
+  }
+  catch(error){
+    console.log("errror");
+    res.status(400).json({error: error.message})
+  }
+
+
+});
 exports.user_detail = asyncHandler(async (req, res, next) => {
 //   res.send(`Not implemented: user detail: ${req.params.id}`);
   //find by id and then return prediction list
