@@ -24,11 +24,13 @@ export default function(){
         })
     }
     return(
-        <h1>
-            Leaderboard 
+        <div className="flex flex-col items-center pt-24 min-h-[100vh]">
+            <h1 className="mt-[7vh] text-4xl text-green-300">
+                Leaderboard
+            </h1>
             <ul>
                 {showLeaderboard()}
             </ul>
-        </h1>
+        </div>
     )
 }

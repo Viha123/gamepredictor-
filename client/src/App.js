@@ -10,7 +10,7 @@ import Predictions from './components/predictions';
 
 function App() {
   return (
-    <div className="app-container">
+    <div className="app-container bg-zinc-900">
       <Navbar/>
       <Routes>
         <Route exact path="/" element={<Fixtures />} />

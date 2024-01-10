@@ -86,14 +86,14 @@ export default function User() {
     //get id of user here?
   }
   return (
-    <div>
-      <h1>Sign In</h1>
+    <div className="flex flex-col items-center pt-24 min-h-[100vh]">
+      <h1 className="mt-[7vh] text-4xl text-green-300">Sign In</h1>
       <form onSubmit={onSubmitSignIn}>
         <div className="form-group">
           <label>Username: </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-zinc-900 border-2 border-green-300 text-green-300"
             id="userSignIn"
             value={username}
             onChange={(e) => updateUserName(e.target.value)}
@@ -103,23 +103,30 @@ export default function User() {
           <label>Password: </label>
           <input
             type="password"
-            className="form-control"
+            className="form-control bg-zinc-900 border-2 border-green-300 text-green-300"
             id="signInPass"
             value={signInPass}
             onChange={(e) => setSignInPass(e.target.value)}
           />
         </div>
         <div className="form-group">
-          <input type="submit" value="Submit" />
+          <input 
+          type="submit" 
+          value="Submit" 
+          className="m-3 bg-green-300 hover:scale-110 text-black font-bold py-2 px-4 transform active:scale-90 transition duration-150 "
+
+        />
         </div>
       </form>
+      {signUpdone ? (<div> Sign Up Done! </div>) : (<div> Create an account to get started :)</div>)}
+
       <h1>OR Create an Account</h1>
       <form onSubmit={onSumbitCreate}>
         <div className="form-group">
           <label>Create User: </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-zinc-900 border-2 border-green-300 text-green-300"
             id="userCreate"
             value={createusername}
             onChange={(e) => toggleCreateUserName(e.target.value)}
@@ -129,7 +136,7 @@ export default function User() {
           <label>User Email: </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-zinc-900 border-2 border-green-300 text-green-300"
             id="emailCreate"
             value={createEmail}
             onChange={(e) => toggleCreateEmail(e.target.value)}
@@ -139,17 +146,18 @@ export default function User() {
           <label>Password: </label>
           <input
             type="password"
-            className="form-control"
+            className="form-control bg-zinc-900 border-2 border-green-300 text-green-300"
             id="passCreate"
             value={pass}
             onChange={(e) => setPass(e.target.value)}
           />
         </div>
         <div className="form-group">
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit"
+          className="m-3 bg-green-300 hover:scale-110 text-black font-bold py-2 px-4 transform active:scale-90 transition duration-150 "
+          />
         </div>
       </form>
-      {signUpdone ? (<div> Sign Up Done! </div>) : (<div> Create an account to get started :)</div>)}
     </div>
   );
 }

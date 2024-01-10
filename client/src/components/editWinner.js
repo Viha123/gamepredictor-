@@ -32,9 +32,9 @@ export default function EditWinner() {
 
     }
     return (
-        <div>
-            You are here to edit {params.id}
-            <form onSubmit={onSubmit}>
+        <div className="flex flex-col items-center pt-24 min-h-[100vh]">
+            <h1 className="mt-[7vh] text-4xl text-green-300">Edit Winner</h1>
+            <form onSubmit={onSubmit} className="flex flex-col items-center">
                 <div className="form-group">
                     <label htmlFor="name">Winner: </label>
                     <input
@@ -46,11 +46,11 @@ export default function EditWinner() {
                     />
                 </div>
                 <div className="form-group">
-                    <input
+                    <input 
                         type="submit"
                         value="Update Winner"
-                        className="btn btn-primary"
-                    />
+                        className="m-3 bg-green-300 hover:scale-110 text-black font-bold py-2 px-4 transform active:scale-90 transition duration-150 "
+                        />
                 </div>
             </form>
 

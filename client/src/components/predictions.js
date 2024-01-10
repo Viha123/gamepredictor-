@@ -160,10 +160,15 @@ export default function Predictions() {
   
 
   return (
-    <div>
-      <h1>PERSONALIZED PREDICTION PAGE FOR {userData.username}</h1>
+    <div className="flex flex-col items-center pt-24 min-h-[100vh]">
+      <h1 className="mt-[7vh] text-4xl text-green-300">Hello {userData.username}, it's time to make your predictions ...</h1>
       {predictions.length !== 0 ? (<div>{create_list()}</div>) : (<div>loading</div>)}
-      <button onClick={onSubmitPredictions}> Submit Predictions </button>
+      <button 
+        onClick={onSubmitPredictions}
+        className="m-3 bg-green-300 hover:scale-110 text-black font-bold py-2 px-4 transform active:scale-90 transition duration-150"
+        > 
+        Submit Predictions 
+      </button>
       {isLoading == true ? (<div>loading</div>) : (<br></br>)}
     </div>
   );
