@@ -63,14 +63,16 @@ exports.user_create_post = [
   asyncHandler(async (req, res, next) => {
     //check if username already exists
     // console.log(req.body);
-
-    const user = new User({
-      //during create they don't have an option to add predictions
-      username: req.body.username,
-      email: req.body.email,
-      realPredictions: req.body.predictions,
-    });
-    await user.save().then(doc=>res.json(doc));
+    const { username, email, password } = req.body;
+    try{
+      const user = User.signUp(username, email, password);
+      await user.save();
+      res.json(user);
+    }
+    catch(error){
+      res.status(400).json({error: error.message})
+    }
+    
     
 
   }),

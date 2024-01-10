@@ -11,6 +11,7 @@ export default function User() {
   const [createusername, setCreateusername] = useState("");
   const [createEmail, setEmail] = useState(""); //don't need email while signing in
   const [pass, setPass] = useState("");
+  const [signUpdone, setSignUpdone] = useState(false);
   function updateUserName(val) {
     return setUserName(val);
   }
@@ -49,7 +50,7 @@ export default function User() {
     var payload = {
       username: createusername,
       email: createEmail,
-      predictions: [],
+      password: pass,
     };
     const response = await fetch(`http://localhost:3000/users/create`, {
       // Enter your IP address here
@@ -63,7 +64,7 @@ export default function User() {
     });
     const docDetails = await response.json();
     console.log(docDetails);
-    navigate(`${docDetails._id}/predictions`);
+    setSignUpdone(true);
     //get id of user here?
   }
   return (
@@ -78,6 +79,16 @@ export default function User() {
             id="userSignIn"
             value={username}
             onChange={(e) => updateUserName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Password: </label>
+          <input
+            type="password"
+            className="form-control"
+            id="passCreate"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
           />
         </div>
         <div className="form-group">
@@ -107,9 +118,20 @@ export default function User() {
           />
         </div>
         <div className="form-group">
+          <label>Password: </label>
+          <input
+            type="password"
+            className="form-control"
+            id="passCreate"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
           <input type="submit" value="Submit" />
         </div>
       </form>
+      {signUpdone ? (<div> Sign Up Done! </div>) : (<div> Create an account to get started :)</div>)}
     </div>
   );
 }
