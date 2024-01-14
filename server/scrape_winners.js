@@ -1,4 +1,7 @@
+var fetch = require('node-fetch');
+const Fixture = require("./models/Fixture");
 const puppeteer = require("puppeteer");
+
 const preparePageForTests = async (page) => {
 
   // Pass the User-Agent Test.
@@ -7,12 +10,52 @@ const preparePageForTests = async (page) => {
   await page.setUserAgent(userAgent);
   }
   
+
+const mongoose = require("mongoose");
+
+mongoose.set("strictQuery", false);
+
+const mongoDB = "mongodb+srv://sviha195:JeA90LX2Edhloa5U@sandbox.bnjpbzw.mongodb.net/gamewars?retryWrites=true&w=majority";
+
+main().catch((err) => console.log(err));
+// console.log(theStuff);
+async function main() {
+  console.log("Debug: About to connect");
+  await mongoose.connect(mongoDB);
+  console.log("should be connected lolol");
+  const winners = await getWinners()
+  // console.log(winners);
+  await fixturesUpdate(winners);
+  console.log("Debug: Closing mongoose");
+  await mongoose.connection.close();
+
+}
+async function fixturesUpdate(winners) {
+  // console.log(winners);
+  for(let i = 0; i < winners.length; i ++){
+    var query, query2;
+    query = await Fixture.findOne({team_1_name: winners[i].team1, team_2_name: winners[i].team2}).exec();
+    if(!query){
+      query2 = await Fixture.findOne({team_1_name: winners[i].team2, team_2_name: winners[i].team1}).exec();
+      await updateFix(winners[i], query2)
+    }
+    else{
+      await updateFix(winners[i],query);
+    }
+  }
+}
+async function updateFix(ithwinner, query){
+  if (ithwinner.winner.toLowerCase() === query.team_1_name.toLowerCase() || ithwinner.winner.toLowerCase() === query.team_2_name.toLowerCase() || ithwinner.winner.toLowerCase() === "Tie".toLowerCase()){
+    //only then is it valid
+    const q = await Fixture.findByIdAndUpdate(query._id, {winner : ithwinner.winner})
+  }
+}
 const getWinners = async () => {
   // Start a Puppeteer session with:
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   // - no default viewport (`defaultViewport: null` - website page will in full width and height)
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: "new",
     defaultViewport: null,
   });
 
@@ -33,30 +76,23 @@ const getWinners = async () => {
   // await page.waitForSelector('dr.ds-text-title-xs.ds-font-bold');
   await page.waitForSelector('tr.ds-bg-ui-fill-translucent');
   const data = await page.evaluate(()=> {
-    // const firstRow = document.querySelector("thead.ds-bg-fill-content-alternate.ds-text-left"); //this is in blue for some odd reason
-    const firstRow = document.querySelector("tr.ds-bg-ui-fill-translucent");
-    const ele1 = firstRow.querySelector("td.ds-min-w-max").querySelector('span').innerText;
-    const ele2 = firstRow.querySelectorAll("td.ds-min-w-max.ds-text-right")
-    console.log(ele2)
-    // const team1 = firstRow.querySelector("ds-min-w-max").innerText;
-    // const team2 = firstRow.querySelector("ds-min-w-max ds-text-right").innerText;
-    console.log(firstRow);
-    return {ele1, ele2};
+    var array = [];
+    const regularRow = document.querySelectorAll("tr");
+    for(var i = 1; i < regularRow.length; i ++){
+      //all trs
+      //for each row get the first 3 columns
+      //col 1 is diff from col 2 and 3
+      const team1 = regularRow[i].querySelector("td.ds-min-w-max").querySelector('span').innerText;
+      const team2 = regularRow[i].querySelectorAll("td.ds-min-w-max.ds-text-right")[0].querySelector('span').innerText;
+      const winner = regularRow[i].querySelectorAll("td.ds-min-w-max.ds-text-right")[1].querySelector('span').innerText;
+      // console.log(team1, team2, winner);
+      array.push({team1, team2, winner})
+    }
+
+    return array;
   })
-  // const quotes = await page.evaluate(() => {
-  //   // Fetch the first element with class "quote"
-  //   const quote = document.querySelector(".quote");
-
-  //   // Fetch the sub-elements from the previously fetched quote element
-  //   // Get the displayed text and return it (`.innerText`)
-  //   const text = quote.querySelector(".text").innerText;
-  //   const author = quote.querySelector(".author").innerText;
-
-  //   return { text, author };
-  // });
-
-  console.log(data);
+  // console.log(data);
   await browser.close();
+  return data;
 };
 // Start the scraping
-getWinners();
