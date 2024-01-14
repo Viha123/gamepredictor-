@@ -10,9 +10,7 @@ const Fixture = (props) => (
     <p className="text-gray-500">
       Winner: {props.winner}
     </p>
-    <Link to={`${props.id}/update`} className="text-blue-500 hover:underline">
-      Edit Winner
-    </Link>
+
   </div>
 </div>
    );

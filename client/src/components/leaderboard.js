@@ -1,6 +1,14 @@
 import  React, {useState, useEffect} from 'react';
 import Link from "react-router-dom";
-
+const ListMember = (props) => (
+    <tr 
+        key = {props.index}
+        className="even:bg-zinc-600 odd:bg-zinc-700">
+            <td className="text-left">{props.user.username}</td>
+            <td className="text-left">{props.user.score}</td> 
+    </tr>
+    );
+    
 export default function(){
     const [leaderboard, setLeaderboard] = useState([]);
     useEffect(() => {
@@ -20,7 +28,7 @@ export default function(){
     function showLeaderboard(){
         return leaderboard.map((user, index) => {
             
-            return <li key = {index}>{user.username} {user.score}</li>
+            return <ListMember index = {index} user = {user}/>
         })
     }
     return(
@@ -28,9 +36,21 @@ export default function(){
             <h1 className="mt-[7vh] text-4xl text-green-300">
                 Leaderboard
             </h1>
-            <ul>
-                {showLeaderboard()}
-            </ul>
+            <table className="border-solid w-[30vw]" >
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {showLeaderboard()}
+                    
+                </tbody>
+                
+            </table>
+            
         </div>
     )
 }
