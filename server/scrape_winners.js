@@ -1,7 +1,8 @@
 var fetch = require('node-fetch');
 const Fixture = require("./models/Fixture");
 const puppeteer = require("puppeteer");
-
+const dotenv = require('dotenv');
+dotenv.config();
 const preparePageForTests = async (page) => {
 
   // Pass the User-Agent Test.
@@ -15,7 +16,7 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb+srv://sviha195:JeA90LX2Edhloa5U@sandbox.bnjpbzw.mongodb.net/gamewars?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI;
 
 main().catch((err) => console.log(err));
 // console.log(theStuff);

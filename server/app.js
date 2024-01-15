@@ -7,6 +7,8 @@ const cors = require("cors");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const dotenv = require('dotenv');
+dotenv.config();
 
 var app = express();
 app.use(cors());
@@ -14,7 +16,7 @@ app.use(cors());
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb+srv://sviha195:JeA90LX2Edhloa5U@sandbox.bnjpbzw.mongodb.net/gamewars?retryWrites=true&w=majority"
+const mongoDB = process.env.MONGODB_URI;
 
 main().catch((err)=> console.log(err));
 async function main() {
